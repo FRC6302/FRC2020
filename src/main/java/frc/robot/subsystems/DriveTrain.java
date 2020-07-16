@@ -31,6 +31,8 @@ public class DriveTrain extends SubsystemBase {
   TalonSRX motorR2;
   //AHRS is the NavX gyro class
   AHRS ahrs;
+  hh;
+  
 
   /**
    * Creates a new DriveTrain.
