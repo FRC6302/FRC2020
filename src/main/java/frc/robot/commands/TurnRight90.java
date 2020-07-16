@@ -47,7 +47,7 @@ public class TurnRight90 extends CommandBase {
     catch(RuntimeException exception) {
       DriverStation.reportError("Error instantiating navX MXP:  " + exception.getMessage(), true);
     }
-    //ahrs.reset();
+    //ahrs.reset();p    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
