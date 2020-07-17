@@ -26,16 +26,13 @@ private boolean finished = false;
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    
+    driveTrain.rotateRight(90);
+    finished = true;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    driveTrain.rotateRight(90);
-    finished = true;
-    
-    //driveTrain.stopDrive();
   }
 
   // Called once the command ends or is interrupted.

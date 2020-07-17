@@ -6,11 +6,11 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot.subsystems;
+import frc.robot.Constants;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -72,10 +72,14 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public double getGyroAngle(){
-    return ahrs.getAngle();
+    return ahrs.getYaw();
   }
 
-  public void usePIDOutput(double output){
+  public double getMeasurement(){
+    return 90;
+  }
+
+  public void useOutput(double output){
     //right is inverted so that the robot turns right
     setLeftMotors(output / 30);
     setRightMotors(-output / 30);
@@ -95,21 +99,28 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public void rotateRight(double targetAngle){
+    try {
+      ahrs.zeroYaw();
+    }
+    catch(RuntimeException exception) {
+      DriverStation.reportError("Error zeroing navX MXP yaw:  " + exception.getMessage(), true);
+    }
     double kP = 0.025;
-    double error = targetAngle - ahrs.getAngle();
+    double error = targetAngle - ahrs.getYaw();
     double threshold = Constants.PIDErrorThreshold;
     double leftCommand = 0;
     double rightCommand = 0;
 
     while (error > threshold)
     {
-      error = targetAngle - ahrs.getAngle();
+      error = targetAngle - ahrs.getYaw();
+      
       double steeringAdjust = error * kP;
       leftCommand += steeringAdjust;
       rightCommand -= steeringAdjust;
       
-      setLeftMotors(leftCommand / 30);
-      setRightMotors(rightCommand / 30);
+      setLeftMotors(leftCommand / 70);
+      setRightMotors(rightCommand / 70);
     }
     //stopDrive();
   }
@@ -131,7 +142,7 @@ public class DriveTrain extends SubsystemBase {
       setLeftMotors(leftCommand / 30);
       setRightMotors(rightCommand / 30);
     }
-    //stopDrive();
+    stopDrive();
   }
 
   public void stopDrive(){

@@ -7,6 +7,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
 //import edu.wpi.cscore.UsbCamera;
 //import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -166,7 +167,7 @@ public class RobotContainer {
     turnRight90.addRequirements(driveTrain);
     turnRight902 = new TurnRight902(driveTrain);
     turnRight902.addRequirements(driveTrain);
-    turnRight903 = new TurnRight903(driveTrain);
+    turnRight903 = new TurnRight903(90, driveTrain);
     turnRight903.addRequirements(driveTrain);
 
     shooter = new Shooter();
@@ -221,15 +222,24 @@ public class RobotContainer {
   }
 
   public double getDriverRawAxis(int axis){
-    //return driverController.getRawAxis(axis);
+    try {
+      return driverController.getRawAxis(axis);
+    }
+    catch(RuntimeException exception) {
+      DriverStation.reportError("Error returning raw axis:  " + exception.getMessage(), true);
+    }
     //this error might have something to do with the squared values in DriveGTA
     return 0;
   }
 
   public double getDriverDeadzoneAxis(int axis){
-    //double rawValue = driverController.getRawAxis(axis);
-    //return Math.abs(rawValue) < Constants.deadzone ? 0.0 : rawValue;
-    //this error might have something to do with the squared values in DriveGTA
+    try {
+    double rawValue = driverController.getRawAxis(axis);
+    return Math.abs(rawValue) < Constants.deadzone ? 0.0 : rawValue;
+    }
+    catch(RuntimeException exception) {
+      DriverStation.reportError("Error getting raw axis or return deadzone axis:  " + exception.getMessage(), true);
+    }
     return 0;
   }
 
@@ -280,11 +290,11 @@ public class RobotContainer {
     JoystickButton turnRight90Button = new JoystickButton(driverController, Constants.turnRight90Button);
     turnRight90Button.whenPressed(new TurnRight90(driveTrain));
 
-    //JoystickButton turnRight902Button = new JoystickButton(driverController, Constants.turnRight902Button);
-    //turnRight902Button.whenPressed(new TurnRight902(driveTrain));
+    JoystickButton turnRight902Button = new JoystickButton(driverController, Constants.turnRight902Button);
+    turnRight902Button.whenPressed(new TurnRight902(driveTrain));
 
-    JoystickButton turnRight903Button = new JoystickButton(driverController, Constants.turnRight903Button);
-    turnRight903Button.whenPressed(new TurnRight903(driveTrain));
+    //JoystickButton turnRight903Button = new JoystickButton(driverController, Constants.turnRight903Button);
+    //turnRight903Button.whenPressed(new TurnRight903(90, driveTrain));
 
   }
 

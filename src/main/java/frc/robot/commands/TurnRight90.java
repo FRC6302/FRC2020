@@ -11,7 +11,6 @@ import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
-//import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveTrain;
 
@@ -47,7 +46,12 @@ public class TurnRight90 extends CommandBase {
     catch(RuntimeException exception) {
       DriverStation.reportError("Error instantiating navX MXP:  " + exception.getMessage(), true);
     }
-    //ahrs.reset();p    
+    try {
+      ahrs.zeroYaw();
+    }
+    catch(RuntimeException exception) {
+      DriverStation.reportError("Error zeroing navX MXP yaw:  " + exception.getMessage(), true);
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -74,15 +78,14 @@ public class TurnRight90 extends CommandBase {
 
     //As of 7/14/20, this command turns left for like half a sec, then turns right like one sec the first
     //time that it's run. The next times, it barely moves any to the right.
-    double steeringAdjust = ahrs.getAngle() * kp;
-
+    double steeringAdjust = ahrs.getYaw() * kp;
     leftCommand -= steeringAdjust;
     rightCommand += steeringAdjust;
 
     driveTrain.setLeftMotors(leftCommand / 30);
     driveTrain.setRightMotors(rightCommand / 30);
 
-    if (ahrs.getAngle() >= (targetAngle - angleLeeway) && ahrs.getAngle() <= (targetAngle + angleLeeway))
+    if (ahrs.getYaw() >= (targetAngle - angleLeeway) && ahrs.getYaw() <= (targetAngle + angleLeeway))
     {
       finished = true;  
     }

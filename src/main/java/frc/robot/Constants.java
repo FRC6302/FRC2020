@@ -84,11 +84,12 @@ public final class Constants {
 
     //gyro
     public static final double PIDErrorThreshold = 2;
-    public static final double kp = 0.01;
+    public static final double kp = 0.011;
     public static final double ki = 0.01;
     public static final double kd = 0.01;
 	public static final double TurnToleranceDeg = 5;
-	public static final double TurnRateToleranceDegPerS = 5; //idk what this should be
+    public static final double TurnRateToleranceDegPerS = 5; //idk what this should be
+    
 	
     //camera resolutions
 	public static final int camera1XAxisResolution = 320;
@@ -107,12 +108,12 @@ public final class Constants {
     public static final int turnRight903Button = Constants.yButton;
     
     //operator controller buttons
-	public static final int shootButton = Constants.xButton;
-    public static final int feedButton = Constants.aButton;
-	public static final int shootAndFeedButton = Constants.bButton;
+	//public static final int shootButton = Constants.xButton;
+    //public static final int feedButton = Constants.aButton;
+	//public static final int shootAndFeedButton = Constants.bButton;
 	public static final int intakeButton = Constants.rightBumper;
-	public static final int timedLiftButton = Constants.yButton;
+	//public static final int timedLiftButton = Constants.yButton;
 	public static final int spinButton = Constants.leftBumper;
-	public static final int liftUpAndDownAxis = Constants.rightStickY;
+    public static final int liftUpAndDownAxis = Constants.rightStickY;
 	
 }
