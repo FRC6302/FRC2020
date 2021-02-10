@@ -19,7 +19,7 @@ import com.kauailabs.navx.frc.AHRS;
 
 public class DriveTrain extends SubsystemBase {
   /*
-  NOTE TO NEW CODERS: YOU SHOULD PROBABLY DO THE APCSA CODEHS COURSE BEFORE TRYING TO CODE 
+  NOTE TO NEW CODERS: YOU SHOULD PROBABLY DO THE AP CSA CODEHS COURSE BEFORE TRYING TO CODE 
   FOR ROBOTICS. IT WAS THE MOST HELPFUL COURSE I'VE DONE, AND THE BEGINNING IS FUN WITH KAREL.
   MAKE SURE YOU COMPLETELY UNDERSTAND ALL THE STUFF ABOUT CLASSES, OBJECTS, AND METHODS. YOU CAN
   PROBABLY SKIP SOME OF THE STRING STUFF, BUT IT'S STILL GOOD TO KNOW. GOOD LUCK :) -SAMUEL
@@ -88,14 +88,7 @@ public class DriveTrain extends SubsystemBase {
   public boolean isWithinThreshold(double targetAngle){
     double error = targetAngle - ahrs.getAngle();
     double threshold = Constants.PIDErrorThreshold;
-    if (error > threshold)
-    {
-      return false;
-    }
-    else
-    {
-      return true;
-    }
+    return error <= threshold;
   }
 
   public void rotateRight(double targetAngle){

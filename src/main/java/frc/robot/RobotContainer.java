@@ -28,7 +28,7 @@ import frc.robot.commands.AutonMiddle;
 import frc.robot.commands.AutonRight;
 import frc.robot.commands.Feed;
 import frc.robot.commands.DriveGTA;
-import frc.robot.commands.LiftUpAndDown;
+import frc.robot.commands.LiftUp;
 import frc.robot.commands.TargetX;
 import frc.robot.commands.TargetingSequence;
 import frc.robot.commands.Move;
@@ -46,7 +46,6 @@ import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Spinner;
 
@@ -75,7 +74,7 @@ public class RobotContainer {
   //private final DriveMecanum driveMecanum;
 
   private final Elevator elevator;
-  private final LiftUpAndDown liftUpAndDown;
+  private final LiftUp liftUp;
   private final TimedLift timedLift;
 
   private final Shooter shooter;
@@ -91,9 +90,9 @@ public class RobotContainer {
   
   private final Move move;
 
-  private final Limelight limelight;
+  //private final Limelight limelight;
   private final TargetX targetX;
-  private final TargetDistance targetDistance;
+  private final TargetDistance targetDistance; 
   private final SeekLeft seekLeft;
   private final SeekRight seekRight;
   private final TargetingSequence targetingSequence;
@@ -120,7 +119,7 @@ public class RobotContainer {
    */
   public RobotContainer() {
     driverController = new XboxController(Constants.driverControllerPort);
-    operatorController = new XboxController(Constants.operatorControllerPort);
+    //operatorController = new XboxController(Constants.operatorControllerPort);
 
     driveTrain = new DriveTrain();
     driveGTA = new DriveGTA(driveTrain);
@@ -137,31 +136,31 @@ public class RobotContainer {
     */
 
     elevator = new Elevator();
-    liftUpAndDown = new LiftUpAndDown(elevator);
-    liftUpAndDown.addRequirements(elevator);
-    elevator.setDefaultCommand(liftUpAndDown);
+    liftUp = new LiftUp(elevator);
+    liftUp.addRequirements(elevator);
+    elevator.setDefaultCommand(liftUp);
     timedLift = new TimedLift(elevator);
     timedLift.addRequirements(elevator);
 
     move = new Move(driveTrain);
     move.addRequirements(driveTrain);
 
-    limelight = new Limelight();
+    //limelight = new Limelight();
     targetX = new TargetX(driveTrain);
     targetX.addRequirements(driveTrain);
-    targetX.addRequirements(limelight);
+    //targetX.addRequirements(limelight);
     targetDistance = new TargetDistance(driveTrain);
     targetDistance.addRequirements(driveTrain);
-    targetDistance.addRequirements(limelight);
+    //targetDistance.addRequirements(limelight);
     seekLeft = new SeekLeft(driveTrain);
     seekLeft.addRequirements(driveTrain);
-    seekLeft.addRequirements(limelight);
+    //seekLeft.addRequirements(limelight);
     seekRight = new SeekRight(driveTrain);
     seekRight.addRequirements(driveTrain);
-    seekRight.addRequirements(limelight);
+    //seekRight.addRequirements(limelight);
     targetingSequence = new TargetingSequence(driveTrain);
     targetingSequence.addRequirements(driveTrain);
-    targetingSequence.addRequirements(limelight);
+    //targetingSequence.addRequirements(limelight);
 
     turnRight90 = new TurnRight90(driveTrain);
     turnRight90.addRequirements(driveTrain);
@@ -226,7 +225,7 @@ public class RobotContainer {
       return driverController.getRawAxis(axis);
     }
     catch(RuntimeException exception) {
-      DriverStation.reportError("Error returning raw axis:  " + exception.getMessage(), true);
+      DriverStation.reportError("Error getting raw axis because: " + exception.getMessage(), true);
     }
     //this error might have something to do with the squared values in DriveGTA
     return 0;
@@ -235,19 +234,19 @@ public class RobotContainer {
   public double getDriverDeadzoneAxis(int axis){
     try {
     double rawValue = driverController.getRawAxis(axis);
-    return Math.abs(rawValue) < Constants.deadzone ? 0.0 : rawValue;
+    return (Math.abs(rawValue) <= Constants.deadzone) ? 0.0 : rawValue;
     }
     catch(RuntimeException exception) {
-      DriverStation.reportError("Error getting raw axis or return deadzone axis:  " + exception.getMessage(), true);
+      DriverStation.reportError("Error getting raw axis or returning deadzone axis because: " + exception.getMessage(), true);
     }
     return 0;
   }
-
+  /*
   public double getOperatorDeadzoneAxis(int axis){
     double rawValue = operatorController.getRawAxis(axis);
     return Math.abs(rawValue) < Constants.deadzone ? 0.0 : rawValue;
   }
-
+  */
   /**
    * Use this method to define your button->command mappings.  Buttons can be created by
    * instantiating a {@link GenericHID} or one of its subclasses ({@link
@@ -267,16 +266,16 @@ public class RobotContainer {
       //Constants.shootAndFeedButton);
     //shootAndFeedButton.whileHeld(new ShootAndFeed(shooter, feeder));
 
-    //JoystickButton limelightTargetButton = new JoystickButton(driverController, 
-      //Constants.limelightTargetButton);
+    JoystickButton limelightTargetButton = new JoystickButton(driverController, 
+      Constants.limelightTargetButton);
     //limelightTargetButton.whileHeld(new TargetX(driveTrain));
     //limelightTargetButton.whileHeld(new TargetDistance(driveTrain));
     //limelightTargetButton.whileHeld(new SeekLeft(driveTrain));
-    //limelightTargetButton.whileHeld(new SeekRight(driveTrain));
+    limelightTargetButton.whileHeld(new SeekRight(driveTrain));
     //limelightTargetButton.whileHeld(new TargetingSequence(driveTrain));
 
-    JoystickButton moveButton = new JoystickButton(driverController, Constants.moveButton);
-    moveButton.whenPressed(new Move(driveTrain, 0.3, -0.3, 1));
+    //JoystickButton moveButton = new JoystickButton(driverController, Constants.moveButton);
+    //moveButton.whenPressed(new Move(driveTrain, 0.3, -0.3, 1));
 
     //JoystickButton intakeButton = new JoystickButton(operatorController, Constants.intakeButton);
     //intakeButton.whileHeld(new TakeInBalls(intake));
@@ -287,11 +286,11 @@ public class RobotContainer {
     //JoystickButton spinButton = new JoystickButton(operatorController, Constants.spinButton);
     //spinButton.whenPressed(new Spin(spinner));
 
-    JoystickButton turnRight90Button = new JoystickButton(driverController, Constants.turnRight90Button);
-    turnRight90Button.whenPressed(new TurnRight90(driveTrain));
+    //JoystickButton turnRight90Button = new JoystickButton(driverController, Constants.turnRight90Button);
+    //turnRight90Button.whenPressed(new TurnRight90(driveTrain));
 
-    JoystickButton turnRight902Button = new JoystickButton(driverController, Constants.turnRight902Button);
-    turnRight902Button.whenPressed(new TurnRight902(driveTrain));
+    //JoystickButton turnRight902Button = new JoystickButton(driverController, Constants.turnRight902Button);
+    //turnRight902Button.whenPressed(new TurnRight902(driveTrain));
 
     //JoystickButton turnRight903Button = new JoystickButton(driverController, Constants.turnRight903Button);
     //turnRight903Button.whenPressed(new TurnRight903(90, driveTrain));

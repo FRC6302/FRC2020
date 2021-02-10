@@ -80,13 +80,14 @@ public class SeekRight extends CommandBase {
       //finished = true;
       steeringAdjust = x;
     }
-
+    /*
     double leftCommand = 0;
-    leftCommand -= steeringAdjust;
+    leftCommand += steeringAdjust;
     double rightCommand = 0;
-    rightCommand += steeringAdjust;
-    driveTrain.setLeftMotors(leftCommand/3);
-    driveTrain.setRightMotors(rightCommand/3);
+    rightCommand -= steeringAdjust;
+    */
+    driveTrain.setLeftMotors(steeringAdjust/3);
+    driveTrain.setRightMotors(steeringAdjust/3);
 
   }
 

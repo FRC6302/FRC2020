@@ -17,7 +17,7 @@ public class TimedShoot extends CommandBase {
   Timer timer;
   private boolean finished = false;
   /**
-   * Creates a new AutoShoot.
+   * Creates a new TimedShoot.
    */
   public TimedShoot(Shooter s) {
     // Use addRequirements() here to declare subsystem dependencies.

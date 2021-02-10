@@ -8,18 +8,16 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
-import frc.robot.Robot;
 import frc.robot.subsystems.Elevator;
 
-public class LiftUpAndDown extends CommandBase {
+public class LiftUp extends CommandBase {
   private final Elevator elevator;
   /**
-   * Creates a new LiftUpAndDown.
+   * Creates a new LiftUp.
    */
-  public LiftUpAndDown(Elevator e) {
+  public LiftUp(Elevator elevator) {
     // Use addRequirements() here to declare subsystem dependencies.
-    elevator = e;
+    this.elevator = elevator;
     addRequirements(elevator);
   }
 
@@ -31,9 +29,9 @@ public class LiftUpAndDown extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double elevatorHeightAdjustment = Robot.robotContainer.getOperatorDeadzoneAxis
-      (Constants.liftUpAndDownAxis);
-    elevator.setElevatorMotor(elevatorHeightAdjustment);
+    //double elevatorHeightAdjustment = Robot.robotContainer.getOperatorDeadzoneAxis
+      //(Constants.liftUpAndDownAxis);
+    //elevator.setElevatorMotor(elevatorHeightAdjustment);
   }
 
   // Called once the command ends or is interrupted.

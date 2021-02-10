@@ -10,7 +10,6 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.Robot;
-import frc.robot.Utilities;
 import frc.robot.subsystems.DriveTrain;
 
 import com.kauailabs.navx.frc.AHRS;
@@ -33,34 +32,28 @@ public class DriveGTA extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    NetworkTableInstance.getDefault().getTable("limelight").getEntry("camMode").setNumber(1);
+    NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(0);
+    NetworkTableInstance.getDefault().getTable("limelight").getEntry("camMode").setNumber(0); //change to 1 for light mode
+    NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(0);
+    NetworkTableInstance.getDefault().getTable("limelight").getEntry("stream").setNumber(0);
     ahrs = new AHRS(SPI.Port.kMXP);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //double triggerVal = Robot.m_robotContainer.getDriverRawAxis(Constants.rightTriggerValue) 
-    //- Robot.m_robotContainer.getDriverRawAxis(Constants.leftTriggerValue);
-
-    //driveTrain.setLeftMotors(triggerVal + stick);
-    //driveTrain.setRightMotors(triggerVal - stick); 
-
-    //I think this just multiplies the two values. Fix this later.
-    double stick = Utilities.scale(Robot.robotContainer.getDriverDeadzoneAxis(Constants.leftStickX), 
-    Constants.turningRate);
-
-    //squaring the trigger values make them less sensitive when you barely press down on them. 
-    double rightTriggerSquared = Robot.robotContainer.getDriverRawAxis(Constants.rightTrigger)
-      *Robot.robotContainer.getDriverRawAxis(Constants.rightTrigger);
-    double leftTriggerSquared = Robot.robotContainer.getDriverRawAxis(Constants.leftTrigger)
-      *Robot.robotContainer.getDriverRawAxis(Constants.leftTrigger);
+    double scaledStickInput = Robot.robotContainer.getDriverDeadzoneAxis(Constants.leftStickX) * Constants.turningRate;
     
+    //double triggerVal = Robot.robotContainer.getDriverRawAxis(Constants.rightTrigger) 
+    //- Robot.robotContainer.getDriverRawAxis(Constants.leftTrigger);
+    
+    //squaring the trigger values make them less sensitive when you barely press down on them. 
+    double rightTriggerSquared = Math.pow(Robot.robotContainer.getDriverRawAxis(Constants.rightTrigger), 2);
+    double leftTriggerSquared = Math.pow(Robot.robotContainer.getDriverRawAxis(Constants.leftTrigger), 2);
     double triggerVal = rightTriggerSquared - leftTriggerSquared;
 
-    driveTrain.setLeftMotors(triggerVal + stick);
-    driveTrain.setRightMotors(triggerVal - stick);
-
+    driveTrain.setLeftMotors(triggerVal + scaledStickInput);
+    driveTrain.setRightMotors(triggerVal - scaledStickInput);
   }
 
   // Called once the command ends or is interrupted.

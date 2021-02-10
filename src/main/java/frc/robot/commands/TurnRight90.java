@@ -85,10 +85,7 @@ public class TurnRight90 extends CommandBase {
     driveTrain.setLeftMotors(leftCommand / 30);
     driveTrain.setRightMotors(rightCommand / 30);
 
-    if (ahrs.getYaw() >= (targetAngle - angleLeeway) && ahrs.getYaw() <= (targetAngle + angleLeeway))
-    {
-      finished = true;  
-    }
+    finished = ahrs.getYaw() >= (targetAngle - angleLeeway) && ahrs.getYaw() <= (targetAngle + angleLeeway);  
   }
 
   // Called once the command ends or is interrupted.
